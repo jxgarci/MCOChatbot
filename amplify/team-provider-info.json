@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-mcochatbot-dev-131117-authRole",
+      "UnauthRoleArn": "arn:aws:iam::942380459501:role/amplify-mcochatbot-dev-131117-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::942380459501:role/amplify-mcochatbot-dev-131117-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-mcochatbot-dev-131117-deployment",
+      "UnauthRoleName": "amplify-mcochatbot-dev-131117-unauthRole",
+      "StackName": "amplify-mcochatbot-dev-131117",
+      "StackId": "arn:aws:cloudformation:eu-west-2:942380459501:stack/amplify-mcochatbot-dev-131117/ad7462f1-11b6-11ee-9632-0a63690ef93e",
+      "AmplifyAppId": "d271viw909ddwt"
+    }
+  }
+}
