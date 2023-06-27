@@ -24,7 +24,7 @@ export default function UserMessage(props) {
       borderRadius="25px"
       margin="0.7%"
       padding="10px 40px 10px 40px"
-      backgroundColor="rgba(184,206,249,1)"
+      backgroundColor="rgba(184,206,249,0.7)"
       {...getOverrideProps(overrides, "UserMessage")}
       {...rest}
     >

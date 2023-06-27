@@ -39,25 +39,21 @@ export default function TextBox(props) {
     // Display the message in the chat feed
     props.displayMessage(input_message);
     // Send the message to the backend
-    
+
   };
 
   return (
     <View
       width="100%"
-      height="100%"
+      height="130%"
       display="inline-flex"
-      gap="unset"
-      alignItems="unset"
-      justifyContent="unset"
-      padding="0px 0px 0px 0px"
-      backgroundColor="rgba(184,206,249,0.7)"
+      backgroundColor="rgba(184,206,249,1)"
       {...getOverrideProps(overrides, "TextBox")}
       {...rest}
     >
       <Icon
         width="1%"
-        height="15px"
+        height="10%"
         paths={[
           {
             d: "M0 0L1003.96 0L1003.96 -4L0 -4L0 0Z",
@@ -66,17 +62,10 @@ export default function TextBox(props) {
             strokeWidth: 4,
           },
         ]}
-        display="block"
-        gap="unset"
-        alignItems="unset"
-        justifyContent="unset"
-        position="absolute"
-        top="85%"
-        bottom="33.59%"
-        left="5.16%"
-        right="11.67%"
+        position="relative"
+        top="87%"
+        left="6%"
         transformOrigin="top left"
-        transform="rotate(0deg)"
         {...getOverrideProps(overrides, "border")}
       ></Icon>
       <textarea
@@ -95,9 +84,8 @@ export default function TextBox(props) {
           display: "block",
           width: "70%", 
           height: "70%",
-          padding: "8px 16px",
           border: "none",
-          backgroundColor: "rgba(184,206,249,0.5)",
+          backgroundColor: "rgba(200,206,249,0.5)",
 
         }}
         placeholder="Write Something Here ..."
@@ -108,12 +96,11 @@ export default function TextBox(props) {
       ></textarea>
       <Icon
         width="30%"
-        height="30%"
         viewBox={{
           minX: 0,
           minY: 0,
-          width: 33.669921875,
-          height: 39.3892822265625,
+          width: 16,
+          height: 16,
         }}
         paths={[
           {
@@ -122,11 +109,8 @@ export default function TextBox(props) {
             fillRule: "nonzero",
           },
         ]}
-        display="block"
-        alignItems="center" // Center vertically
-        position="absolute"
-        left="70.81%"
-        top="50%" // Adjust the value to vertically position the icon
+        position="relative"
+        top="40%" // Adjust the value to vertically position the icon
         transform="translateY(-50%)" // Center vertically using transform
         {...getOverrideProps(overrides, "Vector")}
       ></Icon>
