@@ -1,20 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   TextBox,
+  ChatInterface,
   NavBar
- } from './ui-components';
+ } from './ui-components-personalized';
 
 
 
 function App() {
+  // Set the messages array in the local storage
+  localStorage.setItem('messages', JSON.stringify([]));
+
+  // Display the elements of the interface
   return (
     <div className="App">
       <NavBar />
-      <header className="App-header">
-        
-      </header>
-      <TextBox />
+      <ChatInterface />
     </div>
   );
 }

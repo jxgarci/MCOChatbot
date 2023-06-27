@@ -1,7 +1,5 @@
 /***************************************************************************
  * The contents of this file were generated with Amplify Studio.           *
- * Please refrain from making any modifications to this file.              *
- * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
 /* eslint-disable */
@@ -10,19 +8,48 @@ import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Text, View } from "@aws-amplify/ui-react";
 
 export default function TextBox(props) {
-  const { overrides, ...rest } = props;
+  const { overrides, displayMessage, ...rest } = props;
+  const [message, setMessage] = React.useState(""); // State to store the entered message
+
+  /**
+  *  Manage the message input in the textarea
+  */
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (message.trim()) {
+        sendMessage(message);
+        setMessage(""); // Clear the textarea
+      }
+    }
+  };
+
+  /**
+   * Manage changes in the textarea
+   */
+  const handleChange = (event) => {
+    setMessage(event.target.value);
+  };
+
+  /**
+   * Display the element <UserMessage /> in the chat interface and send it to the backend
+   * @param {string} input_message - The message to be sent
+   */
+  const sendMessage = (input_message) => {
+    // Display the message in the chat feed
+    props.displayMessage(input_message);
+    // Send the message to the backend
+    
+  };
 
   return (
     <View
       width="100%"
-      height="120px"
-      bottom="0"
-      left="0"
+      height="100%"
       display="inline-flex"
       gap="unset"
       alignItems="unset"
       justifyContent="unset"
-      position="fixed"
       padding="0px 0px 0px 0px"
       backgroundColor="rgba(184,206,249,0.7)"
       {...getOverrideProps(overrides, "TextBox")}
@@ -74,6 +101,9 @@ export default function TextBox(props) {
 
         }}
         placeholder="Write Something Here ..."
+        value={message} // Bind the value of the textarea to the message state
+        onChange={handleChange} // Handle changes in the textarea
+        onKeyDown={handleKeyDown} // Handle keydown event
         {...getOverrideProps(overrides, "TextInput")}
       ></textarea>
       <Icon
