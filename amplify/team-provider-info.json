@@ -10,6 +10,17 @@
       "StackName": "amplify-mcochatbot-dev-131117",
       "StackId": "arn:aws:cloudformation:eu-west-2:942380459501:stack/amplify-mcochatbot-dev-131117/ad7462f1-11b6-11ee-9632-0a63690ef93e",
       "AmplifyAppId": "d271viw909ddwt"
+    },
+    "categories": {
+      "function": {
+        "mcochatbotConvHandler": {
+          "deploymentBucketName": "amplify-mcochatbot-dev-131117-deployment",
+          "s3Key": "amplify-builds/mcochatbotConvHandler-69462f49563655664d72-build.zip"
+        }
+      },
+      "api": {
+        "MCOChatbot": {}
+      }
     }
   }
 }

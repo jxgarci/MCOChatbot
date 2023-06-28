@@ -32,10 +32,28 @@ export default function UserMessage(props) {
         fontFamily="Inter"
         fontSize="20px"
         fontWeight="600"
-        right="0"
+        color="rgba(0,0,0,1)"
+        textTransform="capitalize"
+        lineHeight="24.204544067382812px"
+        textAlign="center"
+        display="block"
+        direction="column"
+        justifyContent="unset"
+        width="100%" // Set the width to 100% of the container
+        height="unset"
+        gap="unset"
+        alignItems="unset"
+        grow="1"
+        shrink="1"
+        basis="0"
+        position="relative"
+        padding="0px 0px 0px 0px"
+        whiteSpace="pre-wrap"
+        wordWrap="break-word" // Enable word wrapping
         children={message}
         {...getOverrideProps(overrides, "Text")}
       ></Text>
+
     </Flex>
   );
 }

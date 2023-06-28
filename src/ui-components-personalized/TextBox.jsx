@@ -6,6 +6,7 @@
 import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Text, View } from "@aws-amplify/ui-react";
+import { sendQuery} from "../ApiEndpoint.js";
 
 export default function TextBox(props) {
   const { overrides, displayMessage, ...rest } = props;
@@ -24,25 +25,25 @@ export default function TextBox(props) {
     }
   };
 
-  /**
-   * Manage changes in the textarea
-   */
   const handleChange = (event) => {
     setMessage(event.target.value);
   };
 
   /**
-   * Display the element <UserMessage /> in the chat interface and send it to the backend
+   * This function takes the input message from textarea, sends the query to the backend
+   * and display both messages, indicating the sender in both cases.
+   * It is async as it has to wait fot the response from the backend.
    * @param {string} input_message - The message to be sent
    */
-  const sendMessage = (input_message) => {
+  async function sendMessage(input_message) {
     // Display the message in the chat feed
-    props.displayMessage(input_message);
+    props.displayMessage(input_message, "user");
     // Send the message to the backend
+    let response = await sendQuery(input_message);
+    props.displayMessage(response, "bot");
+  }
 
-  };
-
-  return (
+  return ( // Components and styles
     <View
       width="100%"
       height="130%"

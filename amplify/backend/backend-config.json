@@ -1,25 +1,44 @@
 {
   "api": {
     "MCOChatbot": {
-      "dependsOn": [],
-      "output": {
-        "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            }
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
           ],
-          "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "api key description"
-            },
-            "authenticationType": "API_KEY"
-          }
+          "category": "function",
+          "resourceName": "mcochatbotConvHandler"
         }
-      },
+      ],
       "providerPlugin": "awscloudformation",
-      "service": "AppSync"
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "mcochatbotConvHandler": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_mcochatbotConvHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "mcochatbotConvHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_mcochatbotConvHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "mcochatbotConvHandler"
+        }
+      ]
     }
   }
 }

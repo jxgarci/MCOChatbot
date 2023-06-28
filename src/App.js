@@ -1,6 +1,5 @@
 import './App.css';
 import {
-  TextBox,
   ChatInterface,
   NavBar
  } from './ui-components-personalized';

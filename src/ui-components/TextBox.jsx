@@ -8,29 +8,26 @@
 import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Text, View } from "@aws-amplify/ui-react";
-
 export default function TextBox(props) {
   const { overrides, ...rest } = props;
-
   return (
     <View
-      width="100%"
+      width="1207px"
       height="120px"
-      bottom="0"
-      left="0"
-      display="inline-flex"
+      display="block"
       gap="unset"
       alignItems="unset"
       justifyContent="unset"
-      position="fixed"
+      position="relative"
       padding="0px 0px 0px 0px"
       backgroundColor="rgba(184,206,249,0.7)"
       {...getOverrideProps(overrides, "TextBox")}
       {...rest}
     >
       <Icon
-        width="1%"
-        height="15px"
+        width="1003.96px"
+        height="0px"
+        viewBox={{ minX: 0, minY: 0, width: 1003.962890625, height: 1 }}
         paths={[
           {
             d: "M0 0L1003.96 0L1003.96 -4L0 -4L0 0Z",
@@ -44,7 +41,7 @@ export default function TextBox(props) {
         alignItems="unset"
         justifyContent="unset"
         position="absolute"
-        top="85%"
+        top="66.41%"
         bottom="33.59%"
         left="5.16%"
         right="11.67%"
@@ -52,33 +49,33 @@ export default function TextBox(props) {
         transform="rotate(0deg)"
         {...getOverrideProps(overrides, "border")}
       ></Icon>
-      <textarea
-        type="text"
-        style={{
-          overflowY: "auto",
-          fontFamily: "Inter",
-          position: "relative",
-          fontSize: "100%",
-          fontWeight: "400",
-          top: "15%",
-          left: "5%",
-          color: "rgba(0,0,0,1)",
-          lineHeight: "36px",
-          textAlign: "left",
-          display: "block",
-          width: "70%", 
-          height: "70%",
-          padding: "8px 16px",
-          border: "none",
-          backgroundColor: "rgba(184,206,249,0.5)",
-
-        }}
-        placeholder="Write Something Here ..."
+      <Text
+        fontFamily="Inter"
+        fontSize="24px"
+        fontWeight="400"
+        color="rgba(0,0,0,1)"
+        lineHeight="36px"
+        textAlign="left"
+        display="block"
+        direction="column"
+        justifyContent="unset"
+        width="1003.96px"
+        height="60.46px"
+        gap="unset"
+        alignItems="unset"
+        position="absolute"
+        top="8.4%"
+        bottom="41.22%"
+        left="5.16%"
+        right="11.67%"
+        padding="0px 0px 0px 0px"
+        whiteSpace="pre-wrap"
+        children="Write Something Here ..."
         {...getOverrideProps(overrides, "TextInput")}
-      ></textarea>
+      ></Text>
       <Icon
-        width="30%"
-        height="30%"
+        width="33.67px"
+        height="39.39px"
         viewBox={{
           minX: 0,
           minY: 0,
@@ -93,11 +90,14 @@ export default function TextBox(props) {
           },
         ]}
         display="block"
-        alignItems="center" // Center vertically
+        gap="unset"
+        alignItems="unset"
+        justifyContent="unset"
         position="absolute"
-        left="70.81%"
-        top="50%" // Adjust the value to vertically position the icon
-        transform="translateY(-50%)" // Center vertically using transform
+        top="33.59%"
+        bottom="33.59%"
+        left="92.81%"
+        right="4.4%"
         {...getOverrideProps(overrides, "Vector")}
       ></Icon>
     </View>

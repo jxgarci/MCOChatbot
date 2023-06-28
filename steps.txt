@@ -1,0 +1,6 @@
+1. Created Amplify and React environment
+2. Amplify pull: Downloaded the components for the interface
+3. Changed the components, added them to the ...-personalized folder
+4. For the Backend: ampliafy add api -> created the api and the lambda function (everything stored in "Amplify" folder)
+4.1 When trying to create the python lambda functiony, some errors spotted regarding dependencies -> SOLUTION: create a venv and install the dependencies there
+5. Connected the API to the front end, to be able to stablish the connection between front and Backend

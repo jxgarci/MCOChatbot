@@ -9,5 +9,3 @@ export { default as UserMessage } from "./UserMessage";
 export { default as ChatbotMessage } from "./ChatbotMessage";
 export { default as NavBar } from "./NavBar";
 export { default as studioTheme } from "./studioTheme";
-export { default as MessageCreateForm } from "./MessageCreateForm";
-export { default as MessageUpdateForm } from "./MessageUpdateForm";
