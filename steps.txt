@@ -3,4 +3,6 @@
 3. Changed the components, added them to the ...-personalized folder
 4. For the Backend: ampliafy add api -> created the api and the lambda function (everything stored in "Amplify" folder)
 4.1 When trying to create the python lambda functiony, some errors spotted regarding dependencies -> SOLUTION: create a venv and install the dependencies there
-5. Connected the API to the front end, to be able to stablish the connection between front and Backend
+5. Connected the API to the front end, to be able to stablish the connection between front and Backend. The method is a POST
+   in order to be able to send large queries without any connection problem. Using CloudWatch logs of execution and control we
+   get to check which are the problems that araise during the development from the API utilization

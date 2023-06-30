@@ -52,7 +52,6 @@ export default function ChatbotMessage(props) {
         position="relative"
         padding="0px 0px 0px 0px"
         whiteSpace="pre-wrap"
-        wordWrap="break-word" // Enable word wrapping
         children={message}
         {...getOverrideProps(overrides, "Text")}
       ></Text>
