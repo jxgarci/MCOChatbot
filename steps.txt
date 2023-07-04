@@ -6,3 +6,7 @@
 5. Connected the API to the front end, to be able to stablish the connection between front and Backend. The method is a POST
    in order to be able to send large queries without any connection problem. Using CloudWatch logs of execution and control we
    get to check which are the problems that araise during the development from the API utilization
+6. Connect the API to the Lex bot:
+   Python SDK was used
+   Whenever the bot gets updated, the version and alias must also update. aliasId must be changed in mcochatbotConvHandler index.py file.
+   Moreover in the lex console, the new alias language should be connected to the LexHelperFunction
