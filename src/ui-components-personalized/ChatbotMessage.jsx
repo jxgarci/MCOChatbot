@@ -11,6 +11,31 @@ import { Flex, Text } from "@aws-amplify/ui-react";
 
 export default function ChatbotMessage(props) {
   const { overrides, message, ...rest } = props;
+
+  /**
+   * Function to transform the links inside the message and make them clickable
+   * @returns UserMessage component in order to display it
+   */
+  const renderMessageWithLinks = () => {
+    const urlRegex = /(?:^|\s)((?:www\.[^\s]+)|(?:https?:\/\/[^\s]+))/g; // Regex to detect links
+    const parts = message.split(urlRegex); // Split the message into parts to isolate the link
+
+    return parts.map((part, index) => {
+      if (part.match(urlRegex)) {
+        // Render link if the part is a URL
+        const url = part.startsWith("www.") ? `http://${part}` : part;
+        return (
+          <a key={index} href={url} target="_blank">
+            {part}
+          </a>
+        );
+      } else {
+        // Render plain text
+        return <span key={index}>{part}</span>;
+      }
+    });
+  };
+
   return (
     <Flex
       gap="10px"
@@ -32,11 +57,10 @@ export default function ChatbotMessage(props) {
       {...rest}
     >
       <Text
-        fontFamily="Inter"
-        fontSize="20px"
+        fontFamily="Helvetica"
+        fontSize="17px"
         fontWeight="600"
         color="rgba(0,0,0,1)"
-        textTransform="capitalize"
         lineHeight="24.204544067382812px"
         textAlign="center"
         display="block"
@@ -54,7 +78,7 @@ export default function ChatbotMessage(props) {
         whiteSpace="pre-wrap"
         children={message}
         {...getOverrideProps(overrides, "Text")}
-      ></Text>
+      >{renderMessageWithLinks()}</Text>
     </Flex>
   );
 }

@@ -29,11 +29,10 @@ export default function UserMessage(props) {
       {...rest}
     >
       <Text
-        fontFamily="Inter"
-        fontSize="20px"
+        fontFamily="Helvetica"
+        fontSize="17px"
         fontWeight="600"
         color="rgba(0,0,0,1)"
-        textTransform="capitalize"
         lineHeight="24.204544067382812px"
         textAlign="center"
         display="block"
