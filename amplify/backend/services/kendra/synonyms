@@ -1,44 +1,4 @@
-# Lines starting with pound are comments and blank lines are ignored.
-
-# Synonym relationships can be defined as unidirectional or bidirectional relationships.
-
-# Unidirection relationships are represented by any term sequence 
-# on the left hand side (LHS) of "=>" followed by synonyms on the right hand side (RHS)
-CodeStar => AWS CodeStar
-# This will map CodeStar to AWS CodeStar, but not vice-versa
-
-# To map terms vice versa
-ML => Machine Learning
-Machine Learning => ML
-
-# Multiple synonym relationships may be defined in one line as well by comma seperation.
-autoscaling group, ASG => Auto Scaling group, autoscaling
-# The above is equivalent to:
-# autoscaling group => Auto Scaling group, autoscaling
-# ASG => Auto Scaling group, autoscaling
-
-# Bi-directional synonyms are comma separated terms with no "=>"
-DNS, Route53, Route 53
-# DNS, Route53, and Route 53 map to one another and are interchangeable at match time
-# The above is equivalent to:
-# DNS => Route53, Route 53
-# Route53 => DNS, Route 53
-# Route 53 => DNS, Route53
-
-# Overlapping LHS terms will be merged
-Beta => Alpha
-Beta => Gamma
-Beta, Delta
-# is equivalent to:
-# Beta => Alpha, Gamma, Delta
-# Delta => Beta
-
-# Synonym rule count is the total number of lines defining synonym relationships
-# Term count is the total number of unique terms for all rules. 
-# This thesaurus has a synonym rule count of 8 and a term count of 18. 
-# Comments and blanks lines do not count.
-
-# ************ From here starts the MCOChatbot thesaurus ************
+# ************ MCOChatbot thesaurus ************
 
 # General synonyms
 EC2, ec2 => Elastic Compute 2
@@ -58,8 +18,11 @@ DMS => Database Migration Service
 Database Migration Service => DMS
 
 # Windows related synonyms
+wec2 instances, wec instances => wec2
+w instances, winstances => windows instances
 WEC2, wec2, Wec2, wEC2, wEc2, weC2 => Windows EC2
 wd, wnd, wnds => Windows
+
 
 # SQL related synonyms
 SQL =>  Structured Query Language

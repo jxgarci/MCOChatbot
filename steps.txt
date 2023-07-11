@@ -18,3 +18,6 @@
 8. Developed Kendra:
    8.1 Created the index and provided the data source: MACO workshop
    8.2 Created a thesaurus file for synonyms (improve query performance)
+9. Created sagemaker endpoint with a summarization model
+10. Developed the referenceEngineHandler function for connecting the kendra and sagemaker services
+11. Connected all the previous services to conform the core chatbot project scope

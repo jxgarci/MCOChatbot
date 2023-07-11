@@ -4,8 +4,14 @@ import UserMessage from "./UserMessage";
 import ChatbotMessage from "./ChatbotMessage";
 
 export default function ChatInterface() {
+    const chatFeedRef = React.useRef(null); // Reference to the chat feed element
     const [messages, setMessages] = React.useState([]);
 
+    React.useEffect(() => {
+        // Scroll to the bottom of the chat feed when new messages are added
+        chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
+    }, [messages]);
+    
     /**
      * This function forces the update of messages, which triggers the rendering of the messages
      * NOTE THAT EVERYTIME THE PAGE IS RELOADED, THE MESSAGES ARE LOST.
@@ -19,7 +25,7 @@ export default function ChatInterface() {
           ];
           return updatedMessages;
         });
-      };
+    };
     
     /**
      * Function to load the messages in the chat
@@ -38,7 +44,7 @@ export default function ChatInterface() {
     return (
         // Creating the chat interface with the feed and the textbox
         <div className="chat-interface">
-            <div className="chat-feed">
+            <div className="chat-feed" ref={chatFeedRef}>
                 {renderMessages()}
             </div>
             <div className="text-box-container">
