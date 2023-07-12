@@ -18,6 +18,7 @@ export default function ChatInterface() {
      * In order too avoid this, usage of a S3 bucket or localstorage is recommended
      */
     const displayMessage = (input_message, sender) => {
+        // Appeding the message to the array of messages in order to display them
         setMessages((prevMessages) => {
           const updatedMessages = [
             ...prevMessages,
@@ -25,6 +26,28 @@ export default function ChatInterface() {
           ];
           return updatedMessages;
         });
+        // Whenever the user sends a message, the loading message is displayed
+        if (sender === "user") {
+            setMessages((prevMessages) => {
+              const loadingMessage = {
+                message: "Loading, please wait...",
+                sender: "bot",
+              };
+              return [...prevMessages, loadingMessage];
+            });
+        }
+        // When the response from the back-end arrives we delete the loading message.
+        if (sender === "bot") {
+            // Removing the loading message for displaying the actual response
+            setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages];
+                const loadingMessageIndex = updatedMessages.findIndex(
+                    (message) => message.message === "Loading, please wait..."
+                );
+                updatedMessages.splice(loadingMessageIndex, 1);
+                return updatedMessages;
+            });
+        }
     };
     
     /**

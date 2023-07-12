@@ -1,62 +1,81 @@
 .App {
-  text-align: center;
-  height: 100%;
+	text-align: center;
+	height: 100%;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+	height: 40vmin;
+	pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+	.App-logo {
+		animation: App-logo-spin infinite 20s linear;
+	}
 }
 
 .App-header {
-  background-color: white;
-  min-height: 100%;
-  display: block;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+	background-color: white;
+	min-height: 100%;
+	display: block;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
 }
 
 .App-link {
-  color: #61dafb;
+	color: #61dafb;
 }
+
 ::-webkit-scrollbar {
-  width: 0;  /* Remove scrollbar, but still lets you use it */
-  background: "transparent";
+	width: 0;
+	/* Remove scrollbar, but still lets you use it */
+	background: "transparent";
 }
 
 .chat-interface {
-  height: 86.8vh; /* Set the height of the chat interface to fill the viewport */
-  display: flex;
-  flex-direction: column;
-  position: relative;
+	height: 86.8vh;
+	/* Set the height of the chat interface to fill the viewport */
+	display: flex;
+	flex-direction: column;
+	position: relative;
 }
 
 .chat-feed {
-  flex-grow: 1; /* Allow the chat-feed to grow and fill the remaining vertical space */
-  overflow-y: auto;
-  z-index: 1;
+	flex-grow: 1;
+	/* Allow the chat-feed to grow and fill the remaining vertical space */
+	overflow-y: auto;
+	z-index: 1;
 }
 
 .text-box-container {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
+	position: sticky;
+	bottom: 0;
+	z-index: 2;
 }
 
+.send-icon {
+	background-color: rgb(200, 206, 249, 0.5);
+	border-bottom: 3px solid rgb(38, 52, 80, 1);
+	transition: border-color 0.3s;
+	position: absolute;
+	cursor: pointer;
+	right: 15%;
+	transform: translateY(25%);
+}
+
+.send-icon:active {
+	border: 1px solid rgb(38, 52, 80, 1);
+	/* Add any other visual change to indicate the click effect */
+}
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
 }

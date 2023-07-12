@@ -6,8 +6,11 @@ import requests
 import re
 
 newline, bold, unbold = '\n', '\033[1m', '\033[0m'
-# Sagemaker objects
-endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-3'
+# Sagemaker objects: secondary and emergency endpoints are only used in case the main one doesn't work due to any error
+main_endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-2' # ml.p3.2xlarge
+secondary_endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-3' # ml.p3.2xlarge
+emergency_endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-1' # ml.m5.large
+
 sagemaker = boto3.client('runtime.sagemaker')
 
 # Kendra objects
@@ -22,6 +25,11 @@ def obtain_md_text(url):
     :return: The text of the .md file.
     :rtype: str
     """
+    # Find the current number for md document url
+    number_url = 'https://static.us-east-1.prod.workshops.aws/public/quicklinks/msft-costopt/published.json'
+    response = requests.get(url=number_url)
+    number = json.loads(response.text)['current']
+    
     # Find the part after 'en-US/'
     match = re.search(r'en-US/(.*)', url)
     if match:
@@ -31,15 +39,15 @@ def obtain_md_text(url):
 
     # Trying to obtain index.md from the source
     try: 
-        newMdUrl = 'https://static.us-east-1.prod.workshops.aws/public/f25da707-0832-4bbf-8cbd-f9ed8a9dd277/content/' + part_after_en_us + '/index.en.md'
-        response = requests.get(url=newMdUrl)
+        new_md_url = f'https://static.us-east-1.prod.workshops.aws/public/{number}/content/{part_after_en_us}/index.en.md'
+        response = requests.get(url=new_md_url)
         if response.status_code == 403:
             raise SyntaxError
     except SyntaxError: # Case there is no index.en.md
-        newMdUrl = 'https://static.us-east-1.prod.workshops.aws/public/f25da707-0832-4bbf-8cbd-f9ed8a9dd277/content/' + part_after_en_us + '.en.md'
+        new_md_url = f'https://static.us-east-1.prod.workshops.aws/public/{number}/content/{part_after_en_us}.en.md'
 
     # Making the request
-    response = requests.get(url=newMdUrl)
+    response = requests.get(url=new_md_url)
     if response.status_code == 200:
         return response.text
     return ''
@@ -54,7 +62,7 @@ def chunk_text(input_text):
     input_text = input_text.replace('?', '.<eos>')
     sentences = input_text.split('<eos>')
     # Forming the chunks
-    max_chunk = 300 # 500 words per chunk
+    max_chunk = 300 # 300 words per chunk
     current_chunk = 0
     chunks = []
     # Aggregating the sentences into the chunks
@@ -79,13 +87,31 @@ def chunk_text(input_text):
 
 def query_endpoint(encoded_text):
     """
-    Function to query the SageMaker summarisation endpoint
+    Function to query the SageMaker summarisation endpoint. It first tries the first endpoint, if not it tries invoking the secondary and emergency.
+    In case no endpoint is accesible it will return empty string
     """
     try:
-        response = sagemaker.invoke_endpoint(EndpointName=endpoint_name, ContentType='application/x-text', Body=encoded_text)
-    except: # Case in which the SageMaker endpoint is not working properly
-        return 'ModelError'
+        response = sagemaker.invoke_endpoint(EndpointName=main_endpoint_name, ContentType='application/x-text', Body=encoded_text)
+        return response
+    except:
+        print("ERROR: MAIN ENDPOINT NOT AVAILABLE")
+        response = ''
+    
+    try:
+        response = sagemaker.invoke_endpoint(EndpointName=secondary_endpoint_name, ContentType='application/x-text', Body=encoded_text)
+        return response
+    except:
+        print("ERROR: SECONDARY ENDPOINT NOT AVAILABLE")
+        response = ''
+        
+    try:
+        response = sagemaker.invoke_endpoint(EndpointName=emergency_endpoint_name, ContentType='application/x-text', Body=encoded_text)
+    except:
+        print("ERROR: EMERGENCY ENDPOINT NOT AVAILABLE")
+        response = ''
+        
     return response
+    
 
 def parse_response(response):
     """
@@ -95,32 +121,33 @@ def parse_response(response):
     return model_predictions['summary_text']
 
 def lambda_handler(event, context):
-    print(event)
+    """
+    Function that handles the reference engine logic. 
+    In case sagemaker is not able to retrieve any information, document excerpt from kendra will be returned
+    """
     # Calling kendra to return results that match user query
     response = kendra.query(
         QueryText = event['Query'],
         IndexId = index_id
     )
-    print(response.keys())
-
+    print(response)
     result = {}
     try:
         result = response['FeaturedResultsItems'][0]
     except KeyError:
         result = response['ResultItems'][0]
     
-    print(result)
     # After receiving the first URL provided by kendra, we obtain the text from it
-    # As we mark in_sections parameter as false, we obtain directly the whole text from the document
     input_text = obtain_md_text(url=result['DocumentURI'])
-    chunks = chunk_text(input_text)
     
+    # Chunking the text to enable summarisation
+    chunks = chunk_text(input_text)
     summary_text = []
     for chunk in chunks:
         # Calling the endpoint of SageMaker summarisation model
         query_response = query_endpoint(chunk.encode('utf_8'))
-        if query_response == 'ModelError': # Case in which the SageMaker endpoint is not working properly
-            summary_text = ['ModelError']
+        if query_response == '': # Case in which the SageMaker endpoints are not available
+            summary_text = ['']
             break
         # Parsing the response and obtaining sumary text
         response_text = parse_response(query_response)
@@ -128,8 +155,15 @@ def lambda_handler(event, context):
         summary_text.append(response_text)
     
     # Responding to the request
-    if summary_text == ['ModelError']: # Case in which the SageMaker endpoint is not working properly
-        summary_text_str = result['DocumentExcerpt']['Text']
+    if summary_text == ['']: # Case in which the SageMaker endpoints are not working properly
+        try:
+            summary_text_str = result['DocumentExcerpt']['Text']
+        except KeyError: # In case kendra also fails to retrieve information
+            summary_text_str = 'There have been some issues trying to obtain information for your request. Try to contact optimize-microsoft@amazon.com if you need help'
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'ErrorMessage': summary_text_str })
+            }
     else:
         summary_text_str = ' '.join(summary_text)
     other_resources = response['ResultItems'][1:4]
@@ -141,7 +175,7 @@ def lambda_handler(event, context):
     }
 
     print("###########SUMMARY############")
-    print(' '.join(summary_text))
+    print(summary_text_str)
     
     return {
         'statusCode': 200,
