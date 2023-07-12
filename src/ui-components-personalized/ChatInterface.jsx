@@ -2,16 +2,27 @@ import * as React from "react";
 import TextBox from "./TextBox";
 import UserMessage from "./UserMessage";
 import ChatbotMessage from "./ChatbotMessage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuoteRight, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function ChatInterface() {
     const chatFeedRef = React.useRef(null); // Reference to the chat feed element
     const [messages, setMessages] = React.useState([]);
+    const [selectedButtonText, setSelectedButtonText] = React.useState("");
 
+    // For chatbot initialisation message
+    const copyToTextBox = (text) => {
+        setSelectedButtonText(text);
+    };
+    if (messages.length < 1) {
+        messages.push({ message: "", sender: "bot-initialise" });
+    }
+
+    // Scroll to the bottom of the chat feed when new messages are added
     React.useEffect(() => {
-        // Scroll to the bottom of the chat feed when new messages are added
         chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
     }, [messages]);
-    
+
     /**
      * This function forces the update of messages, which triggers the rendering of the messages
      * NOTE THAT EVERYTIME THE PAGE IS RELOADED, THE MESSAGES ARE LOST.
@@ -20,20 +31,20 @@ export default function ChatInterface() {
     const displayMessage = (input_message, sender) => {
         // Appeding the message to the array of messages in order to display them
         setMessages((prevMessages) => {
-          const updatedMessages = [
-            ...prevMessages,
-            { message: input_message, sender: sender },
-          ];
-          return updatedMessages;
+            const updatedMessages = [
+                ...prevMessages,
+                { message: input_message, sender: sender },
+            ];
+            return updatedMessages;
         });
         // Whenever the user sends a message, the loading message is displayed
         if (sender === "user") {
             setMessages((prevMessages) => {
-              const loadingMessage = {
-                message: "Loading, please wait...",
-                sender: "bot",
-              };
-              return [...prevMessages, loadingMessage];
+                const loadingMessage = {
+                    message: <span><FontAwesomeIcon icon={faQuoteLeft} fade /><span>  Generating response  </span><FontAwesomeIcon icon={faQuoteRight} fade /></span>,
+                    sender: "bot-loader",
+                };
+                return [...prevMessages, loadingMessage];
             });
         }
         // When the response from the back-end arrives we delete the loading message.
@@ -42,14 +53,14 @@ export default function ChatInterface() {
             setMessages((prevMessages) => {
                 const updatedMessages = [...prevMessages];
                 const loadingMessageIndex = updatedMessages.findIndex(
-                    (message) => message.message === "Loading, please wait..."
+                    (message) => message.sender === "bot-loader"
                 );
                 updatedMessages.splice(loadingMessageIndex, 1);
                 return updatedMessages;
             });
         }
     };
-    
+
     /**
      * Function to load the messages in the chat
      * @returns UserMessage component in order to display it
@@ -59,7 +70,7 @@ export default function ChatInterface() {
             if (element.sender === "user") {
                 return <UserMessage key={index} message={element.message} />
             } else {
-                return <ChatbotMessage key={index} message={element.message} />
+                return <ChatbotMessage key={index} message={element} copyToTextBox={copyToTextBox} />
             }
         })
     }
@@ -71,7 +82,7 @@ export default function ChatInterface() {
                 {renderMessages()}
             </div>
             <div className="text-box-container">
-                <TextBox displayMessage={displayMessage} />
+                <TextBox displayMessage={displayMessage} selectedButtonText={selectedButtonText} />
             </div>
         </div>
     );

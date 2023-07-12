@@ -9,7 +9,7 @@ import { Icon, Text, View } from "@aws-amplify/ui-react";
 import { sendQuery } from "../ApiEndpoint.js";
 
 export default function TextBox(props) {
-	const { overrides, displayMessage, ...rest } = props;
+	const { overrides, displayMessage, selectedButtonText, ...rest } = props;
 	// State to store the entered message
 	const [message, setMessage] = React.useState("");
 	// State to track hover and click states
@@ -37,6 +37,14 @@ export default function TextBox(props) {
 			setMessage(""); // Clear the textarea
 		}
 	};
+
+	// Initialisation message
+	React.useEffect(() => {
+		if (selectedButtonText) {
+			setMessage(selectedButtonText);
+		}
+	}, [selectedButtonText]);
+
 	/**
 	*  Manage the message input in the textarea
 	*/
@@ -72,29 +80,12 @@ export default function TextBox(props) {
 	return ( // Components and styles
 		<View
 			width="100%"
-			height="130%"
+			height="135%"
 			display="flex"
 			backgroundColor="rgba(184,206,249,1)"
 			{...getOverrideProps(overrides, "TextBox")}
 			{...rest}
 		>
-			<Icon
-				width="1%"
-				height="10%"
-				paths={[
-					{
-						d: "M0 0L1003.96 0L1003.96 -4L0 -4L0 0Z",
-						stroke: "rgba(0,0,0,1)",
-						fillRule: "nonzero",
-						strokeWidth: 4,
-					},
-				]}
-				position="relative"
-				top="87%"
-				left="6%"
-				transformOrigin="top left"
-				{...getOverrideProps(overrides, "border")}
-			></Icon>
 			<textarea
 				type="text"
 				style={{
@@ -112,7 +103,7 @@ export default function TextBox(props) {
 					width: "70%",
 					height: "70%",
 					border: "none",
-					backgroundColor: "rgba(200,206,249,0.5)",
+					backgroundColor: "rgba(200,206,249,0)",
 
 				}}
 				placeholder="Write Something Here ..."
@@ -131,8 +122,8 @@ export default function TextBox(props) {
 				<Icon
 					// Add event handlers to detect hovering or click
 
-					width="65"
-					height="65"
+					width="45"
+					height="45"
 					viewBox={{
 						minX: 0,
 						minY: 0,
@@ -151,6 +142,6 @@ export default function TextBox(props) {
 					></path>
 				</Icon>
 			</div>
-		</View>
+		</View >
 	);
 }

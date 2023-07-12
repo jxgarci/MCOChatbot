@@ -20,6 +20,12 @@
       },
       "api": {
         "MCOChatbot": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d271viw909ddwt",
+          "type": "manual"
+        }
       }
     }
   }

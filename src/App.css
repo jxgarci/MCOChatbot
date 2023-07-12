@@ -53,21 +53,35 @@
 	position: sticky;
 	bottom: 0;
 	z-index: 2;
+	background-color: rgb(200, 206, 249, 0);
 }
 
 .send-icon {
-	background-color: rgb(200, 206, 249, 0.5);
+	background-color: rgb(200, 206, 249, 0);
 	border-bottom: 3px solid rgb(38, 52, 80, 1);
-	transition: border-color 0.3s;
+	border-right: 3px solid rgb(38, 52, 80, 1);
+	transition: border 0.1s;
 	position: absolute;
 	cursor: pointer;
-	right: 15%;
-	transform: translateY(25%);
+	left: 80%;
+	transform: translateY(60%);
 }
 
 .send-icon:active {
-	border: 1px solid rgb(38, 52, 80, 1);
+	border-bottom: 1px solid rgb(38, 52, 80, 1);
+	border-right: 1px solid rgb(38, 52, 80, 1);
 	/* Add any other visual change to indicate the click effect */
+}
+
+.initial-chatbot-message {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.initial-chatbot-message button {
+	margin: 1%;
+	border-radius: 20px;
 }
 
 @keyframes App-logo-spin {
