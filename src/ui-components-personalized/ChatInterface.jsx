@@ -1,3 +1,8 @@
+/***************************************************************************
+ * The contents of this file were generated with Amplify Studio.           *
+ * 							And modified by Jxgarci						   *
+ **************************************************************************/
+
 import * as React from "react";
 import TextBox from "./TextBox";
 import UserMessage from "./UserMessage";

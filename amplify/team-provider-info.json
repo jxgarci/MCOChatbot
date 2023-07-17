@@ -15,7 +15,7 @@
       "function": {
         "mcochatbotConvHandler": {
           "deploymentBucketName": "amplify-mcochatbot-dev-131117-deployment",
-          "s3Key": "amplify-builds/mcochatbotConvHandler-726336546a4257466441-build.zip"
+          "s3Key": "amplify-builds/mcochatbotConvHandler-624734717173636e4e53-build.zip"
         }
       },
       "api": {

@@ -34,6 +34,7 @@
 	background: "transparent";
 }
 
+/* ------------------------- CHAT INTERFACE ------------------------- */
 .chat-interface {
 	height: 86.8vh;
 	/* Set the height of the chat interface to fill the viewport */
@@ -44,33 +45,33 @@
 
 .chat-feed {
 	flex-grow: 1;
-	/* Allow the chat-feed to grow and fill the remaining vertical space */
 	overflow-y: auto;
+	display: flex;
 	z-index: 1;
+	/* background-color: rgba(238, 238, 238, 0.562); */
+	align-items: center;
+	padding-bottom: 6%;
+	flex-direction: column;
 }
 
-.text-box-container {
-	position: sticky;
-	bottom: 0;
-	z-index: 2;
-	background-color: rgb(200, 206, 249, 0);
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
 }
 
-.send-icon {
-	background-color: rgb(200, 206, 249, 0);
-	border-bottom: 3px solid rgb(38, 52, 80, 1);
-	border-right: 3px solid rgb(38, 52, 80, 1);
-	transition: border 0.1s;
-	position: absolute;
-	cursor: pointer;
-	left: 80%;
-	transform: translateY(60%);
+.message.fade-in {
+	animation-name: fade-in;
+	animation-duration: 0.5s;
+	animation-fill-mode: forwards;
 }
 
-.send-icon:active {
-	border-bottom: 1px solid rgb(38, 52, 80, 1);
-	border-right: 1px solid rgb(38, 52, 80, 1);
-	/* Add any other visual change to indicate the click effect */
+.chatbot.fade-in {
+	animation-duration: 1s;
 }
 
 .initial-chatbot-message {
@@ -82,6 +83,46 @@
 .initial-chatbot-message button {
 	margin: 1%;
 	border-radius: 20px;
+}
+
+.initial-chatbot-message button:hover {
+	margin: 1%;
+	border-radius: 20px;
+	background-color: rgba(184, 206, 249, 1);
+}
+
+/* ------------------------- TEXT BOX ------------------------- */
+
+.text-box-container {
+	position: absolute;
+	width: 75%;
+	height: 8%;
+	bottom: 0;
+	display: flex;
+	z-index: 2;
+	background-color: rgba(255, 255, 255, 0);
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: nowrap;
+	left: 12.5%;
+}
+
+.text-box-container textarea::placeholder {
+	color: white;
+}
+
+.send-icon {
+	background-color: rgb(200, 206, 249, 0);
+	transition: border 0.1s;
+	position: absolute;
+	cursor: pointer;
+	left: 88%;
+}
+
+.send-icon:active {
+	width: 40px;
+	height: 40px;
 }
 
 @keyframes App-logo-spin {

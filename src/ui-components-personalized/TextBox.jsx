@@ -1,5 +1,6 @@
 /***************************************************************************
  * The contents of this file were generated with Amplify Studio.           *
+ * 							And modified by Jxgarci						   *
  **************************************************************************/
 
 /* eslint-disable */
@@ -82,29 +83,32 @@ export default function TextBox(props) {
 			width="100%"
 			height="135%"
 			display="flex"
-			backgroundColor="rgba(184,206,249,1)"
+			borderRadius="15px"
+			style={{
+				boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.7)",
+			}}
+			backgroundColor="rgb(38 46 59)"
+			alignItems="center"
 			{...getOverrideProps(overrides, "TextBox")}
 			{...rest}
 		>
 			<textarea
 				type="text"
 				style={{
+					left: "7%",
 					overflowY: "auto",
 					fontFamily: "Inter",
 					position: "relative",
+					color: "white",
 					fontSize: "100%",
 					fontWeight: "400",
-					top: "15%",
-					left: "5%",
-					color: "rgba(0,0,0,1)",
 					lineHeight: "36px",
 					textAlign: "left",
-					display: "block",
+					display: "flex",
 					width: "70%",
-					height: "70%",
+					height: "80%",
 					border: "none",
 					backgroundColor: "rgba(200,206,249,0)",
-
 				}}
 				placeholder="Write Something Here ..."
 				value={message} // Bind the value of the textarea to the message state
@@ -121,7 +125,6 @@ export default function TextBox(props) {
 			>
 				<Icon
 					// Add event handlers to detect hovering or click
-
 					width="45"
 					height="45"
 					viewBox={{
@@ -131,13 +134,11 @@ export default function TextBox(props) {
 						height: 16,
 					}}
 					position="relative"
-					top="20%"
-					left="10%"
 					{...getOverrideProps(overrides, "Vector")}
 				>
 					<path
 						d={isHovered ? hoverPath : initialPath}
-						fill="rgba(0,0,0,1)"
+						fill="rgba(255,255,255,1)"
 						fillRule="nonzero"
 					></path>
 				</Icon>

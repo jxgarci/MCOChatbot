@@ -1,5 +1,6 @@
 /***************************************************************************
  * The contents of this file were generated with Amplify Studio.           *
+ * 							And modified by Jxgarci						   *
  **************************************************************************/
 
 /* eslint-disable */

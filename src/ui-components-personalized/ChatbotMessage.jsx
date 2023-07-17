@@ -1,7 +1,6 @@
 /***************************************************************************
  * The contents of this file were generated with Amplify Studio.           *
- * Please refrain from making any modifications to this file.              *
- * Any changes to this file will be overwritten when running amplify pull. *
+ * 							And modified by Jxgarci						   *
  **************************************************************************/
 
 /* eslint-disable */
@@ -11,6 +10,23 @@ import { Flex, Text } from "@aws-amplify/ui-react";
 
 export default function ChatbotMessage(props) {
 	const { overrides, message, copyToTextBox, ...rest } = props;
+
+	/* Animation for displaying it */
+	const [isVisible, setIsVisible] = React.useState(false);
+
+	React.useEffect(() => {
+		// Set the component visibility after a delay
+		const delay = 400; // Adjust the delay as needed
+		const timeout = setTimeout(() => {
+			setIsVisible(true);
+		}, delay);
+
+		// Cleanup the timeout when the component unmounts
+		return () => clearTimeout(timeout);
+	}, []);
+
+	// CSS class for the fade-in animation
+	const fadeAnimationClass = isVisible ? "fade-in" : "";
 
 	/**
 	 * Function to transform the links inside the message and make them clickable
@@ -22,7 +38,7 @@ export default function ChatbotMessage(props) {
 			return (
 				<span className="initial-chatbot-message">
 					<span>Hello! I'm the MCO chatbot, I can help you optimizing your Microsoft Workloads.</span>
-					<span>Example queries for each service:</span>
+					<span>Example queries for each service (you can directly select the examples): </span>
 					<span>- Windows on EC2: <button onClick={() => copyToTextBox("Optimize wec2")}> Optimize wec2 </button></span>
 					<span>- SQL: <button onClick={() => copyToTextBox("How can I modernize sql workloads? ")}> How can I modernize sql workloads? </button></span>
 				</span>
@@ -55,41 +71,33 @@ export default function ChatbotMessage(props) {
 
 	return (
 		<Flex
+			className={`message chatbot ${fadeAnimationClass}`}
 			gap="10px"
 			direction="column"
 			style={{
+				opacity: isVisible ? 1 : 0,
 				float: "left",
+				borderRadius: "15px",
+				boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.4)",
 			}}
-			width="50%"
+			width="70%"
 			height="unset"
 			justifyContent="center"
 			alignItems="center"
-			overflow="hidden"
 			position="relative"
-			borderRadius="25px"
 			margin="0.7%"
 			padding="10px 40px 10px 40px"
-			backgroundColor="rgba(248,153,27,1)"
+			backgroundColor="rgba(248, 169, 66, 0.9)"
 			{...getOverrideProps(overrides, "ChatbotMessage")}
 			{...rest}
 		>
 			<Text
-				fontFamily="Helvetica"
+				fontFamily="inter"
 				fontSize="17px"
 				fontWeight="600"
 				color="rgba(0,0,0,1)"
-				lineHeight="24.204544067382812px"
-				textAlign="center"
-				display="block"
-				direction="column"
-				justifyContent="unset"
+				textAlign="justify"
 				width="100%" // Set the width to 100% of the container
-				height="unset"
-				gap="unset"
-				alignItems="unset"
-				grow="1"
-				shrink="1"
-				basis="0"
 				position="relative"
 				padding="0px 0px 0px 0px"
 				whiteSpace="pre-wrap"
