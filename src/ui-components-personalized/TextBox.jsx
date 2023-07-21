@@ -80,36 +80,13 @@ export default function TextBox(props) {
 
 	return ( // Components and styles
 		<View
-			width="100%"
-			height="135%"
-			display="flex"
-			borderRadius="15px"
-			style={{
-				boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.7)",
-			}}
-			backgroundColor="rgb(38 46 59)"
-			alignItems="center"
+			className={"text-box-view"}
 			{...getOverrideProps(overrides, "TextBox")}
 			{...rest}
 		>
 			<textarea
+				className={"text-box-textarea"}
 				type="text"
-				style={{
-					left: "7%",
-					overflowY: "auto",
-					fontFamily: "Inter",
-					position: "relative",
-					color: "white",
-					fontSize: "100%",
-					fontWeight: "400",
-					lineHeight: "36px",
-					textAlign: "left",
-					display: "flex",
-					width: "70%",
-					height: "80%",
-					border: "none",
-					backgroundColor: "rgba(200,206,249,0)",
-				}}
 				placeholder="Write Something Here ..."
 				value={message} // Bind the value of the textarea to the message state
 				onChange={handleChange} // Handle changes in the textarea

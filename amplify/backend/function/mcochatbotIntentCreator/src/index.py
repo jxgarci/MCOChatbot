@@ -317,10 +317,15 @@ def lambda_handler(event, context):
       }
     ]
 	
-	update_response = client.update_intent(botId = "9LMWBBNMCK", 
+	update_response = client.update_intent(intentName = created_intent["intentName"],
+										   botId = "9LMWBBNMCK", 
 					                       botVersion = "DRAFT",
 					                       intentId = created_intent["intentId"],
 					                       localeId = "en_US",
+					                       description = intent_template["description"],
+	                                       sampleUtterances = intent_template["sampleUtterances"],
+	                                       dialogCodeHook = intent_template["dialogCodeHook"],
+	                                       fulfillmentCodeHook = intent_template["fulfillmentCodeHook"],
 					                       slotPriorities = slot_priorities
 	)
 	

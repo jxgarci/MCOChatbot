@@ -7,6 +7,7 @@
 import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Flex, Text } from "@aws-amplify/ui-react";
+import "./../App.css";
 
 export default function ChatbotMessage(props) {
 	const { overrides, message, copyToTextBox, ...rest } = props;
@@ -33,14 +34,18 @@ export default function ChatbotMessage(props) {
 	 * @returns UserMessage component in order to display it
 	 */
 	const renderMessageWithLinks = () => {
-		// Initialization message
+		// Initial message
 		if (message.sender === "bot-initialise") {
 			return (
 				<span className="initial-chatbot-message">
-					<span>Hello! I'm the MCO chatbot, I can help you optimizing your Microsoft Workloads.</span>
+					<span>Hello! I'm the MCO chatbot, I can help you by optimizing your Microsoft Workloads.</span>
 					<span>Example queries for each service (you can directly select the examples): </span>
-					<span>- Windows on EC2: <button onClick={() => copyToTextBox("Optimize wec2")}> Optimize wec2 </button></span>
-					<span>- SQL: <button onClick={() => copyToTextBox("How can I modernize sql workloads? ")}> How can I modernize sql workloads? </button></span>
+					<span>- Windows on EC2:<br></br><button onClick={() => copyToTextBox("Optimize wec2")}> Optimize wec2 </button></span>
+					<span>- SQL: <br></br><button onClick={() => copyToTextBox("How can I modernize sql workloads? ")}> How can I modernize sql workloads? </button></span>
+					<span>- Containers: <br></br><button onClick={() => copyToTextBox(" Why should I utilize containers ")}> Why should I utilize containers </button></span>
+					<span>- Storage: <br></br><button onClick={() => copyToTextBox("How to optimize my EBS volumes in AWS ")}> How to optimize my EBS volumes in AWS </button></span>
+					<span>- Active Directory: <br></br><button onClick={() => copyToTextBox(" Help me with managed Active Directory ")}> Help me with managed Active Directory  </button></span>
+					<span>- .NET apps: <br></br><button onClick={() => copyToTextBox(" What to do to minimize my .net expenditures ")}> What to do to minimize my .net expenditures </button></span>
 				</span>
 			)
 		}
@@ -72,35 +77,15 @@ export default function ChatbotMessage(props) {
 	return (
 		<Flex
 			className={`message chatbot ${fadeAnimationClass}`}
-			gap="10px"
 			direction="column"
 			style={{
 				opacity: isVisible ? 1 : 0,
-				float: "left",
-				borderRadius: "15px",
-				boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.4)",
 			}}
-			width="70%"
-			height="unset"
-			justifyContent="center"
-			alignItems="center"
-			position="relative"
-			margin="0.7%"
-			padding="10px 40px 10px 40px"
-			backgroundColor="rgba(248, 169, 66, 0.9)"
 			{...getOverrideProps(overrides, "ChatbotMessage")}
 			{...rest}
 		>
 			<Text
-				fontFamily="inter"
-				fontSize="17px"
-				fontWeight="600"
-				color="rgba(0,0,0,1)"
-				textAlign="justify"
-				width="100%" // Set the width to 100% of the container
-				position="relative"
-				padding="0px 0px 0px 0px"
-				whiteSpace="pre-wrap"
+				className="message-text"
 				children={message}
 				{...getOverrideProps(overrides, "Text")}
 			>{renderMessageWithLinks()}</Text>

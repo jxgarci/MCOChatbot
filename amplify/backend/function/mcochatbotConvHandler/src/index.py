@@ -25,7 +25,7 @@ client = boto3.client('lexv2-runtime', config=my_config)
 
 # Create a new session - BOT ALIAS MAY CHANGE IF LEX BOT ALIAS GETS UPDATED
 bot_name = '9LMWBBNMCK' # MCOChatbot
-bot_alias = 'X0BG686LWL' # MCOChatbot_v8
+bot_alias = 'PVNWCYHVYJ' # MCOChatbot_v9
 session_id = uuid.uuid4()
 client.put_session(
     botId=bot_name,

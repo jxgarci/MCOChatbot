@@ -20,4 +20,8 @@
    8.2 Created a thesaurus file for synonyms (improve query performance)
 9. Created sagemaker endpoint with a summarization model
 10. Developed the referenceEngineHandler function for connecting the kendra and sagemaker services
-11. Connected all the previous services to conform the core chatbot project scope
+11. Connected all the previous services to conform the core chatbot project scope.
+   REMARKS: reference to referenceEngineHandler in LexHelperFunction (line 119) is pointing to a version not the latest one, changes in the function will not affect lexhelperfunction until this is changed. Also when updating this version
+            also the permissions for LexHelperFunction-role-iolw038p may need to be updated to the new resource.
+12. Improved the interface
+13. Added all the necessary intents

@@ -31,35 +31,15 @@ export default function UserMessage(props) {
 	return (
 		<Flex
 			className={`message user ${fadeAnimationClass}`}
-			gap="10px"
 			direction="column"
 			style={{
 				opacity: isVisible ? 1 : 0,
-				float: "right",
-				borderRadius: "15px",
-				boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.4)",
 			}}
-			width="70%"
-			height="unset"
-			alignItems="center"
-			justifyContent="center"
-			position="relative"
-			margin="0.7%"
-			padding="10px 40px 10px 40px"
-			backgroundColor="rgba(184,206,249,0.7)"
 			{...getOverrideProps(overrides, "UserMessage")}
 			{...rest}
 		>
 			<Text
-				fontFamily="inter"
-				fontSize="17px"
-				fontWeight="600"
-				color="rgba(0,0,0,1)"
-				textAlign="justify"
-				width="100%" // Set the width to 100% of the container
-				position="relative"
-				padding="0px 0px 0px 0px"
-				whiteSpace="pre-wrap"
+				className={"message-text"}
 				children={message}
 				{...getOverrideProps(overrides, "Text")}
 			></Text>
