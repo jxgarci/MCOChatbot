@@ -12,8 +12,6 @@ SM_CONTENT_TYPE = 'application/x-text'
 
 # Sagemaker objects: secondary and emergency endpoints are only used in case the main one doesn't work due to any error
 main_endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-2' # ml.p3.2xlarge
-secondary_endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-3' # ml.p3.2xlarge
-emergency_endpoint_name = 'jumpstart-dft-hf-summarization-bart-large-cnn-samsum-1' # ml.m5.large
 
 sagemaker = boto3.client('runtime.sagemaker')
 
@@ -21,7 +19,6 @@ sagemaker = boto3.client('runtime.sagemaker')
 index_id = '4e1f135a-e872-412f-a05c-5f6ecaf67a1d'
 kendra = boto3.client('kendra')
 
-# ---------------------------------------- FUNCTIONS FOR DATA EXTRACTION ----------------------------------------
 def obtain_md_text(url):
     """
     Function that makes a GET request to the url provided and returns the text of the .md file.
@@ -112,12 +109,9 @@ def chunk_text(input_text):
     
     return chunks
 
-# ---------------------------------------- FUNCTIONS FOR DATA SUMMARISATION ----------------------------------------
-
 def query_endpoint(encoded_text):
     """
-    Function to query the SageMaker summarisation endpoint. It first tries the first endpoint, if not it tries invoking the secondary and emergency.
-    In case no endpoint is accesible it will return empty string
+    Function to query the SageMaker summarisation endpoint.
     """
     try:
         response = sagemaker.invoke_endpoint(EndpointName=main_endpoint_name, ContentType=SM_CONTENT_TYPE, Body=encoded_text)
@@ -125,28 +119,44 @@ def query_endpoint(encoded_text):
     except:
         print("ERROR: MAIN ENDPOINT NOT AVAILABLE")
         response = ''
-    
-    try:
-        response = sagemaker.invoke_endpoint(EndpointName=secondary_endpoint_name, ContentType=SM_CONTENT_TYPE, Body=encoded_text)
-        return response
-    except:
-        print("ERROR: SECONDARY ENDPOINT NOT AVAILABLE")
-        response = ''
-        
-    try:
-        response = sagemaker.invoke_endpoint(EndpointName=emergency_endpoint_name, ContentType=SM_CONTENT_TYPE, Body=encoded_text)
-    except:
-        print("ERROR: EMERGENCY ENDPOINT NOT AVAILABLE")
-        response = ''
         
     return response
-    
 
 def parse_response(response):
     """
     Function to parse the response to the query for the SageMaker summarisation endpoint
     """
     return json.loads(response['Body'].read())['summary_text']
+
+def generate_response(kendra_response, result, summary_text, results_index):
+    """
+    Function to generate the response from the referenceEngineHandler. 
+    :param kendra_response: The response from kendra search.
+    :return: The text json with the response for Lex
+    :rtype: dict
+    """
+    # In case there are several result items, we provide 3 more resource references
+    if (len(kendra_response['ResultItems'])-results_index) > results_index + 4:
+        other_resources = kendra_response['ResultItems'][results_index+1:results_index+4]
+    # In case there is only one result item, we provide no more resource references
+    elif (len(kendra_response['ResultItems'])-results_index) <= 1:
+        other_resources = []
+    # In case there are less than 4 result items in total, we provide only the remaining resource references
+    else:
+        other_resources = kendra_response['ResultItems'][results_index+1:len(kendra_response['ResultItems'])-1]
+    body = {
+        'Title': result['DocumentTitle']['Text'],
+        'Summary': summary_text, # Summary of the first result
+        'Resource': result['DocumentURI'],
+        'OtherResources': other_resources # Other results
+    }
+
+    print(body)
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps(body)
+    }
 
 def lambda_handler(event, context):
     """
@@ -155,55 +165,38 @@ def lambda_handler(event, context):
     """
     # Calling kendra to return results that match user query
     print("QUERY: " + event['Query'])
-    response = kendra.query(
+    kendra_response = kendra.query(
         QueryText = event['Query'],
         IndexId = index_id
     )
-    print(response)
-    
+    print(kendra_response)
+
+    # Handling kendra found no results
+    if len(kendra_response['ResultItems']) == 0:
+        summary_text_str = 'Kendra could not obtain information related to your request. Try to contact optimize-microsoft@amazon.com if you need help'
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'ErrorMessage': summary_text_str })
+        }
+        
     result = {}
     results_index = 0
     try:
-        result = response['FeaturedResultsItems'][0]
+        result = kendra_response['FeaturedResultsItems'][0]
     except KeyError:
-        result = response['ResultItems'][0]
+        result = kendra_response['ResultItems'][0]
         titles = ['Microsoft on AWS Cost Optimization', 'Workshop Studio']
         # Avoiding kendra suggested answers and links outside MACO
         while result['Type'] == 'ANSWER' or result['DocumentTitle']['Text'] not in titles:
             results_index += 1
             try:
-                result = response['ResultItems'][results_index]
-            # In case no matching results from MACO workshop
+                result = kendra_response['ResultItems'][results_index]
+            # In case no matching results from MACO Workshop
             except IndexError: 
-                result = response['ResultItems'][0]
-                summary_text_str = f"""
-                                    I'm sorry but no results from MACO workshop could be retrieved. Even though, I can provide 
-                                    you with some external resources that may help you.\n\nThis is the document excerpt from 
-                                    the reference resource: {result['DocumentExcerpt']['Text']}
-                                    """
+                result = kendra_response['ResultItems'][0]
+                summary_text_str = f"I'm sorry but no results from MACO workshop could be retrieved. Even though, I can provide you with some external resources that may help you.\n\nThis is the document excerpt from the reference resource: {result['DocumentExcerpt']['Text']}"
                 
-                # Obtaining the other resources
-                if len(response['ResultItems']) > 4:
-                    other_resources = response['ResultItems'][1:4]
-                elif len(response['ResultItems']) == 1:
-                    other_resources = []
-                else:
-                    other_resources = response['ResultItems'][1:len(response['ResultItems'])-1]
-
-                # Preparing response
-                body = {
-                    'Title': result['DocumentTitle']['Text'],
-                    'Summary': summary_text_str, # Summary of the first result
-                    'Resource': result['DocumentURI'],
-                    'OtherResources': other_resources # Other results
-                }
-                
-                print(body)
-                
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(body)
-                }
+                return generate_response(kendra_response, result, summary_text_str, results_index=0)
                 
     
     # After receiving the first URL provided by kendra, we obtain the text from it
@@ -224,7 +217,7 @@ def lambda_handler(event, context):
         summary_text.append(response_text)
     
     # Responding to the request
-    if summary_text == ['']: # Case in which the SageMaker endpoints ARE NOT working properly
+    if summary_text == ['']: # Case in which the SageMaker endpoints are not working properly
         try:
             summary_text_str = result['DocumentExcerpt']['Text']
         except KeyError: # In case kendra also fails to retrieve information
@@ -233,27 +226,8 @@ def lambda_handler(event, context):
                 'statusCode': 200,
                 'body': json.dumps({'ErrorMessage': summary_text_str })
             }
-    else: # Case in which the SageMaker endpoints ARE working properly
+    else:
         summary_text_str = ' '.join(summary_text)
 
-    # Obtaining the other resources
-    if len(response['ResultItems']) > results_index + 4:
-        other_resources = response['ResultItems'][results_index+1:results_index+4]
-    elif len(response['ResultItems']) == 1:
-        other_resources = []
-    else:
-        other_resources = response['ResultItems'][results_index+1:len(response['ResultItems'])-1]
-    
-    # Preparing response
-    body = {
-        'Title': result['DocumentTitle']['Text'],
-        'Summary': summary_text_str, # Summary of the first result
-        'Resource': result['DocumentURI'],
-        'OtherResources': other_resources # Other results
-    }
-    print(body)
-    return {
-        'statusCode': 200,
-        'body': json.dumps(body)
-    }
+    return generate_response(kendra_response, result, summary_text_str, results_index)
     

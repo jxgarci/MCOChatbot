@@ -236,10 +236,6 @@ body {
 
 /* ------------------------- STYLES FOR MOBILE DEVICES ------------------------- */
 @media screen and (max-width: 850px) {
-	body {
-		overflow: hidden;
-	}
-
 	.App .navbar {
 		height: 9.2vh;
 	}

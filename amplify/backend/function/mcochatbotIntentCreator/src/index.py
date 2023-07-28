@@ -35,7 +35,38 @@ def remove_elements(bot_id, bot_version, locale_id, intent_response, slot_type_r
 	
 
 def lambda_handler(event, context):
+	"""
+	Function to generate automatic intents and slot types to avoid failures on creation
+	Example of event: 
+	{
+	  "intent": "test",
+	  "sampleValues": [
+	    "Active Directory",
+	    "ms ad",
+	    "microsoft ad",
+	    "directory sharing",
+	    "ad",
+	    "ad connector",
+	    "connector",
+	    "proxy service",
+	    "msad"
+	  ]
+	}
+	"""
 	service = f"{event['intent']}_service"
+	
+	# Sample values for slot type -> MUST BE HARDCODED FOR EACH INTENT
+	try:
+		sample_values = event["sampleValues"]
+	except KeyError:
+		print("ERROR: provide the sample values for creating the correct slot type")
+		response = {
+			"intentCreationResponse":"",
+			"slotTypeCreationResponse":"",
+			"slotCreationResponse":"",
+		}
+		
+		return json.dumps(response, default=str)
 
 	# ------------------------------ Create intent ------------------------------
 	intent_template = {
@@ -106,6 +137,15 @@ def lambda_handler(event, context):
 			},
 			{ 
 				"utterance": "okay, then I have {%s}" % service
+			},
+			{ 
+				"utterance": "make me a summary of {%s}" % service
+			},
+			{ 
+				"utterance": "summarize {%s}" % service
+			},
+			{ 
+				"utterance": "sum up {%s}" % service
 			}
 		]
 	}
@@ -121,39 +161,6 @@ def lambda_handler(event, context):
 	)
 
 	# ------------------------------ Create slot type ------------------------------
-	# Sample values for slot type -> MUST BE HARDCODED FOR EACH INTENT
-	try:
-		sample_values = event["sampleValues"]
-	except KeyError:
-		sample_values = [ # Sample values for containers
-			"Accelerate innovation",
-			"Modernize workloads",
-			"Work with containers",
-			"Use containers",
-			"Containers",
-			"rearchitect apps",
-			"from sql server to amazon aurora",
-			"sql to aurora",
-			"modernize sql",
-			"replatform .net",
-			"replatform dotnet",
-			"replatform windows",
-			"change windows",
-			"replatfrom to Linux",
-			"avoid virtual machines",
-			"maximize application placement",
-			"improve resource utilization",
-			"moving windows to containers",
-			"windows to containers",
-			"implementing containers",
-			"ECS",
-			"Fargate",
-			"Kubernetes",
-			"Kubercost",
-			"App2Container",
-			"Migrating and modernizing java",
-			"Migrating and modernizing .net"
-		] 
 
 	slot_type_values = []
 	for value in sample_values:
