@@ -36,12 +36,12 @@ The folder in which the main html, favicon and other public resources are contai
 
 ### src
 The folder in which the front-end elements are stored. In this folder:
-    - models: amplify generated and not modified folder
-    - ui-components: amplify generated and not modified folder. In this folder changes to the figma components that are syncrhonized with Amplify will be applied to the existing components.
-    - ui-components-personalized: folder where custom and personalized components are stored. These are the ones connected to the published project.
-    - App.css: contains all the styles applied to the personlized components.
-    - App.js: where the app functioning is called.
-    - ApiEndpoint.js: manages the calls to the API from the front-end. In case MCOChatbot has to be added as a widget for a website, after creating the proper interface for that widget, the backend logic can be easily called using the “sendQuery(query)” function from this file.
+- models: amplify generated and not modified folder
+- ui-components: amplify generated and not modified folder. In this folder changes to the figma components that are syncrhonized with Amplify will be applied to the existing components.
+- ui-components-personalized: folder where custom and personalized components are stored. These are the ones connected to the published project.
+- App.css: contains all the styles applied to the personlized components.
+- App.js: where the app functioning is called.
+- ApiEndpoint.js: manages the calls to the API from the front-end. In case MCOChatbot has to be added as a widget for a website, after creating the proper interface for that widget, the backend logic can be easily called using the “sendQuery(query)” function from this file.
 All other components were amplify and react auto gen
 erated and not modified.
 
